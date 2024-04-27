@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -14,7 +14,11 @@ contract JapanBasicIncomeCoin is ERC20, Ownable {
     event MonthlyLimitUpdated(address indexed user, uint256 newLimit);
     event MonthlyLimitReset(address indexed user);
 
-    constructor() ERC20("JapanBasicIncomeCoin", "JBIC") {}
+    constructor(address initialOwner) 
+        ERC20("JapanBasicIncomeCoin", "JBIC")
+        Ownable(initialOwner) {     
+            _mint(msg.sender, 1000 * 10**decimals());  // 初期供給量としてトークンを発行 
+        }
 
     function setMonthlyLimit(address user, uint256 amount) public onlyOwner {
         require(user != address(0), "Invalid address");
